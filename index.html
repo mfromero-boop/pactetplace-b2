@@ -4,30 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PACTetplace - Grupo B2 - Sincronización en Tiempo Real</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  // Esto evita que Tailwind use eval()
-  tailwind.config = {
-    corePlugins: {
-      preflight: false,
-    }
-  }
-</script>
-<style>
-    /* TODOS los @import deben ir PRIMERO */
-    @import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&family=Orbitron:wght@400;700;900&display=swap');
-    
-    /* Después van las reglas normales */
-    body {
-        box-sizing: border-box;
-    }
-    
-    .tech-font { font-family: 'Orbitron', monospace; }
-    .main-font { font-family: 'Love Ya Like A Sister', cursive; }
-    .student-name { font-family: 'Century Gothic', 'Futura', sans-serif; font-weight: bold; text-transform: uppercase; }
-    
-    /* ... el resto de tus estilos IGUAL ... */
-</style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Esto evita que Tailwind use eval()
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+    <style>
+        /* TODOS los @import deben ir PRIMERO */
+        @import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&family=Orbitron:wght@400;700;900&display=swap');
+        
+        /* Después van las reglas normales */
+        body {
+            box-sizing: border-box;
+        }
+        
+        .tech-font { font-family: 'Orbitron', monospace; }
+        .main-font { font-family: 'Love Ya Like A Sister', cursive; }
+        .student-name { font-family: 'Century Gothic', 'Futura', sans-serif; font-weight: bold; text-transform: uppercase; }
         
         .stock-market-bg {
             background: 
@@ -527,7 +524,14 @@
         </main>
     </div>
 
-       <script type="module">
+    <script type="module">
+        // SOLUCIÓN PARA CSP - Deshabilitar funciones que usan eval
+        const originalEval = window.eval;
+        window.eval = function(str) {
+            console.warn('eval blocked by CSP:', str);
+            return originalEval(str);
+        };
+        
         // Firebase Preview (versión nueva)
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js';
         import { getFirestore, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js';
@@ -546,17 +550,17 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Datos iniciales de estudiantes (IGUAL que antes)
+        // Datos iniciales de estudiantes
         const initialStudents = [
             { name: "Lucio Cammarano", coins: 0, avatar: "👦🏽", password: "leon7", username: "lucio" },
             { name: "Daniel Barreto", coins: 0, avatar: "👦🏻", password: "tigre3", username: "daniel" },
             { name: "Darío Maldonado", coins: 0, avatar: "👦🏻", password: "lobo9", username: "dario" },
-            { name: "Luis Fernando Marval", coins: 0, avatar: "👦🏽", password: "aguila5", username: "luis" },
+            { name: "Luis Fernando Marval", coins: 0, avatar: "🧑🏾", password: "aguila5", username: "luis" },
             { name: "Jimena Savovic", coins: 0, avatar: "👱🏻‍♀️", password: "gato2", username: "jimena" },
             { name: "Daniel Rafael", coins: 0, avatar: "👦🏽", password: "oso8", username: "danielr" },
             { name: "José Gabriel Grilli", coins: 0, avatar: "👦🏼", password: "halcon4", username: "jose" },
             { name: "Guillermo Guzmán", coins: 0, avatar: "👦🏻", password: "puma6", username: "guillermo" },
-            { name: "Mafe Romero", coins: 0, avatar: "👩🏻‍💼", password: "admin", username: "mafe", isTeacher: true }
+            { name: "Mafe Romero", coins: 0, avatar: "🦸🏻‍♀️", password: "Tokio-2025", username: "mafe", isTeacher: true }
         ];
 
         const initialRewards = [
@@ -568,12 +572,28 @@
             { name: "Paseo", cost: 15, icon: "🚌", description: "Excursión especial fuera del colegio", color: "from-cyan-600 to-cyan-800" }
         ];
 
+        const avatarOptions = [
+            "👦🏻", "👦🏼", "👦🏽", "👦🏾", "👦🏿", "👧🏻", "👧🏼", "👧🏽", "👧🏾", "👧🏿",
+            "🧑🏻", "🧑🏼", "🧑🏽", "🧑🏾", "🧑🏿", "👨🏻", "👨🏼", "👨🏽", "👨🏾", "👨🏿",
+            "👩🏻", "👩🏼", "👩🏽", "👩🏾", "👩🏿", "🦸🏻‍♂️", "🦸🏼‍♂️", "🦸🏽‍♂️", "🦸🏾‍♂️", "🦸🏿‍♂️",
+            "🦸🏻‍♀️", "🦸🏼‍♀️", "🦸🏽‍♀️", "🦸🏾‍♀️", "🦸🏿‍♀️", "🧙🏻‍♂️", "🧙🏼‍♂️", "🧙🏽‍♂️", "🧙🏾‍♂️", "🧙🏿‍♂️",
+            "🧙🏻‍♀️", "🧙🏼‍♀️", "🧙🏽‍♀️", "🧙🏾‍♀️", "🧙🏿‍♀️", "👱🏻‍♀️", "👱🏼‍♀️", "👱🏽‍♀️", "👱🏾‍♀️", "👱🏿‍♀️",
+            "👱🏻‍♂️", "👱🏼‍♂️", "👱🏽‍♂️", "👱🏾‍♂️", "👱🏿‍♂️", "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", 
+            "🦁", "🐮", "🐷", "🐸", "🐵", "🙈", "🙉", "🙊", "🐒", "🦍", "🦘", "🦥", "🦦", "🦨", "🦡", "🐺", "🐗", "🐴", "🦄", "🦓",
+            "🐆", "🐅", "🦒", "🐘", "🦏", "🦛", "🐪", "🐫", "🦙", "🦌", "🐳", "🐋", "🐬", "🦈", "🐙", "🦑", "🦞", "🦀", "🐡", "🐠",
+            "🐟", "🐝", "🐛", "🦋", "🐌", "🐞", "🐜", "🦗", "🕷️", "🦂", "🐦", "🐤", "🐣", "🐥", "🦆", "🦅", "🦉", "🦇", "🐺", "🦜",
+            "🦩", "🦚", "🦢", "🐧", "🕊️", "🦃", "🐓", "🐔", "🐢", "🦎", "🐍", "🐲", "🐉", "🦕", "🦖", "🐊", "🐸", "🤖", "👽", "🎭", "🎪", "🎨", "🎯", "👻", "🎃", "🤡"
+        ];
+
         let currentUser = null;
         let currentUserIndex = -1;
         let students = [];
         let rewards = [];
         let isAuthenticated = false;
         let syncInterval;
+        let lastSyncTime = 0;
+        const STORAGE_PREFIX = 'pactGroupB2_';
+        let avatarSelectionTarget = null;
 
         // ========== SISTEMA FIREBASE ==========
         async function initializeData() {
@@ -640,16 +660,13 @@
             saveStudentsData();
         }
 
-        // ========== MANTENER TODAS TUS FUNCIONES ORIGINALES ==========
-        // Solo cambiamos las funciones de guardado/carga
-
+        // ========== FUNCIONES PRINCIPALES ==========
         function updateCoins(index, change) {
             const student = students[index];
             const oldCoins = student.coins;
             student.coins = Math.max(0, Math.round((student.coins + change) * 10) / 10);
             
-            saveData(); // Esto ahora guarda en Firebase
-            // updateDisplay() se llamará automáticamente desde Firebase
+            saveData();
             
             if (currentUser && currentUser.isTeacher) {
                 const changeText = change > 0 ? `+${change}` : change.toString();
@@ -669,38 +686,12 @@
             }
         }
 
-        // ========== INICIALIZACIÓN ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeData();
-            createFloatingNumbers();
-            
-            // Mantener todos tus event listeners originales
-            document.getElementById('loginButton').addEventListener('click', attemptLogin);
-            document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('teacherPanelBtn').addEventListener('click', () => {
-                document.getElementById('adminPanel').classList.remove('hidden');
-            });
-            document.getElementById('rewardsToggleStudent').addEventListener('click', () => {
-                document.getElementById('rewardsPanel').classList.remove('hidden');
-            });
+        function quickAssign(index, points) {
+            updateCoins(index, points);
+            document.getElementById(`quickAssign_${index}`).classList.add('hidden');
+        }
 
-            // Enter key support
-            document.getElementById('usernameInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') document.getElementById('passwordInput').focus();
-            });
-            
-            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') attemptLogin();
-            });
-        });
-
-        // ========== PEGAR AQUÍ TODAS TUS OTRAS FUNCIONES ORIGINALES ==========
-        // COPIA Y PEGA desde aquí hacia abajo TODAS tus funciones actuales
-
-        let lastSyncTime = 0;
-        const STORAGE_PREFIX = 'pactGroupB2_';
-
-        // Real-time synchronization system
+        // ========== SISTEMA DE SINCRONIZACIÓN ==========
         function startSync() {
             updateSyncIndicator('connected');
             syncInterval = setInterval(() => {
@@ -717,13 +708,7 @@
         }
 
         function checkForUpdates() {
-            // Esta función ya no es necesaria con Firebase
-            // pero la mantenemos por compatibilidad
             updateSyncIndicator('connected');
-        }
-
-        function triggerSync() {
-            // Esta función ya no es necesaria con Firebase
         }
 
         function updateSyncIndicator(status) {
@@ -748,6 +733,117 @@
                     text.textContent = 'Desconectado';
                     break;
             }
+        }
+
+        // ========== SISTEMA DE AVATAR ==========
+        function showAvatarSelector() {
+            avatarSelectionTarget = { type: 'current', index: currentUserIndex };
+            populateAvatarGrid();
+            document.getElementById('avatarPanel').classList.remove('hidden');
+        }
+
+        function showAvatarSelectorForStudent(studentIndex) {
+            if (!currentUser || !currentUser.isTeacher) return;
+            
+            avatarSelectionTarget = { type: 'admin', index: studentIndex };
+            populateAvatarGrid();
+            document.getElementById('avatarPanel').classList.remove('hidden');
+        }
+
+        function populateAvatarGrid() {
+            const avatarGrid = document.getElementById('avatarGrid');
+            const targetStudent = students[avatarSelectionTarget.index];
+            
+            avatarGrid.innerHTML = avatarOptions.map(avatar => `
+                <div class="avatar-option bg-slate-700/50 hover:bg-slate-600/50 rounded-lg p-4 text-center border border-slate-600/30 ${targetStudent.avatar === avatar ? 'selected' : ''}" onclick="selectAvatar('${avatar}')">
+                    <span class="text-3xl">${avatar}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectAvatar(avatar) {
+            if (!avatarSelectionTarget) return;
+            
+            const targetStudent = students[avatarSelectionTarget.index];
+            const oldAvatar = targetStudent.avatar;
+            
+            targetStudent.avatar = avatar;
+            
+            if (avatarSelectionTarget.type === 'current' && currentUser) {
+                currentUser.avatar = avatar;
+                document.getElementById('avatarButton').textContent = avatar;
+                showChangeNotification(`¡Avatar cambiado a ${avatar}!`);
+            } else if (avatarSelectionTarget.type === 'admin') {
+                showChangeNotification(`Avatar de ${targetStudent.name} cambiado: ${oldAvatar} → ${avatar}`);
+            }
+            
+            saveData();
+            updateDisplay();
+            document.getElementById('avatarPanel').classList.add('hidden');
+            avatarSelectionTarget = null;
+        }
+
+        // ========== SISTEMA DE CONTRASEÑAS ==========
+        function updatePassword(studentIndex) {
+            if (!currentUser || !currentUser.isTeacher) return;
+            
+            const newPassword = document.getElementById(`newPassword_${studentIndex}`).value.trim();
+            if (!newPassword) {
+                showChangeNotification('La contraseña no puede estar vacía');
+                return;
+            }
+            
+            const student = students[studentIndex];
+            const oldPassword = student.password;
+            student.password = newPassword;
+            
+            saveData();
+            showChangeNotification(`Contraseña de ${student.name} actualizada: ${oldPassword} → ${newPassword}`);
+        }
+
+        function updateAdminPassword() {
+            if (!currentUser || !currentUser.isTeacher) return;
+            
+            const newPassword = document.getElementById('adminPassword').value.trim();
+            if (!newPassword) {
+                showChangeNotification('La contraseña no puede estar vacía');
+                return;
+            }
+            
+            const oldPassword = currentUser.password;
+            currentUser.password = newPassword;
+            
+            const adminIndex = students.findIndex(s => s.isTeacher);
+            if (adminIndex !== -1) {
+                students[adminIndex].password = newPassword;
+            }
+            
+            saveData();
+            showChangeNotification(`🔐 Tu contraseña de administrador ha sido actualizada: ${oldPassword} → ${newPassword}`);
+        }
+
+        // ========== SISTEMA DE NOTIFICACIONES ==========
+        function showChangeNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg';
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg">✨</span>
+                    <span class="font-semibold">${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(-50%) translateY(-20px)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 2500);
         }
 
         function showSyncNotification() {
@@ -798,118 +894,7 @@
             }, 3000);
         }
 
-        let avatarSelectionTarget = null;
-
-        function showAvatarSelector() {
-            avatarSelectionTarget = { type: 'current', index: currentUserIndex };
-            populateAvatarGrid();
-            document.getElementById('avatarPanel').classList.remove('hidden');
-        }
-
-        function showAvatarSelectorForStudent(studentIndex) {
-            if (!currentUser || !currentUser.isTeacher) return;
-            
-            avatarSelectionTarget = { type: 'admin', index: studentIndex };
-            populateAvatarGrid();
-            document.getElementById('avatarPanel').classList.remove('hidden');
-        }
-
-        function populateAvatarGrid() {
-            const avatarGrid = document.getElementById('avatarGrid');
-            const targetStudent = students[avatarSelectionTarget.index];
-            
-            avatarGrid.innerHTML = avatarOptions.map(avatar => `
-                <div class="avatar-option bg-slate-700/50 hover:bg-slate-600/50 rounded-lg p-4 text-center border border-slate-600/30 ${targetStudent.avatar === avatar ? 'selected' : ''}" onclick="selectAvatar('${avatar}')">
-                    <span class="text-3xl">${avatar}</span>
-                </div>
-            `).join('');
-        }
-
-        function selectAvatar(avatar) {
-            if (!avatarSelectionTarget) return;
-            
-            const targetStudent = students[avatarSelectionTarget.index];
-            const oldAvatar = targetStudent.avatar;
-            
-            targetStudent.avatar = avatar;
-            
-            if (avatarSelectionTarget.type === 'current' && currentUser) {
-                currentUser.avatar = avatar;
-                document.getElementById('avatarButton').textContent = avatar;
-                showChangeNotification(`¡Avatar cambiado a ${avatar}!`);
-            } else if (avatarSelectionTarget.type === 'admin') {
-                showChangeNotification(`Avatar de ${targetStudent.name} cambiado: ${oldAvatar} → ${avatar}`);
-            }
-            
-            saveData();
-            updateDisplay();
-            document.getElementById('avatarPanel').classList.add('hidden');
-            avatarSelectionTarget = null;
-        }
-
-        function updatePassword(studentIndex) {
-            if (!currentUser || !currentUser.isTeacher) return;
-            
-            const newPassword = document.getElementById(`newPassword_${studentIndex}`).value.trim();
-            if (!newPassword) {
-                showChangeNotification('La contraseña no puede estar vacía');
-                return;
-            }
-            
-            const student = students[studentIndex];
-            const oldPassword = student.password;
-            student.password = newPassword;
-            
-            saveData();
-            showChangeNotification(`Contraseña de ${student.name} actualizada: ${oldPassword} → ${newPassword}`);
-        }
-
-        function updateAdminPassword() {
-            if (!currentUser || !currentUser.isTeacher) return;
-            
-            const newPassword = document.getElementById('adminPassword').value.trim();
-            if (!newPassword) {
-                showChangeNotification('La contraseña no puede estar vacía');
-                return;
-            }
-            
-            const oldPassword = currentUser.password;
-            currentUser.password = newPassword;
-            
-            // Update in the students array as well
-            const adminIndex = students.findIndex(s => s.isTeacher);
-            if (adminIndex !== -1) {
-                students[adminIndex].password = newPassword;
-            }
-            
-            saveData();
-            showChangeNotification(`🔐 Tu contraseña de administrador ha sido actualizada: ${oldPassword} → ${newPassword}`);
-        }
-
-        function showChangeNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg';
-            notification.innerHTML = `
-                <div class="flex items-center space-x-2">
-                    <span class="text-lg">✨</span>
-                    <span class="font-semibold">${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(-50%) translateY(-20px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 2500);
-        }
-
-        // Initialize floating numbers animation
+        // ========== SISTEMA DE ANIMACIONES ==========
         function createFloatingNumbers() {
             const container = document.getElementById('floatingNumbers');
             const numbers = ['₽0.5', '₽1', '₽1.5', '₽2', '₽2.5', '₽3', '+0.5', '+1', '+1.5', '+2', 'PACT', 'COIN'];
@@ -931,6 +916,7 @@
             }, 3000);
         }
 
+        // ========== SISTEMA DE LOGIN ==========
         function attemptLogin() {
             const username = document.getElementById('usernameInput').value.toLowerCase().trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -1004,6 +990,7 @@
             document.getElementById('passwordInput').value = '';
         }
 
+        // ========== SISTEMA DE VISUALIZACIÓN ==========
         function updateDisplay() {
             updateStats();
             renderStudents();
@@ -1226,6 +1213,160 @@
                                 <button onclick="quickAssign(${realIndex}, 0.5)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+0.5</button>
                                 <button onclick="quickAssign(${realIndex}, 1)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+1</button>
                                 <button onclick="quickAssign(${realIndex}, 1.5)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+1.5</button>
+                                <button onclick="quickAssign(${realIndex}, 2)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+2</button>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="quickAssign(${realIndex}, 2.5)" class="bg-orange-600 hover:bg-orange-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+2.5</button>
+                                <button onclick="quickAssign(${realIndex}, 3)" class="bg-orange-600 hover:bg-orange-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+3</button>
+                                <button onclick="quickAssign(${realIndex}, 4)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+4</button>
+                                <button onclick="quickAssign(${realIndex}, 5)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+5</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3 pt-3 border-t border-slate-600/30">
+                            <div class="flex items-center justify-between">
+                                <label class="text-slate-300 text-xs">Configuración de Cuenta:</label>
+                                <button onclick="document.getElementById('accountConfig_${realIndex}').classList.toggle('hidden')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs font-semibold transition-colors">⚙️ Config</button>
+                            </div>
+                            
+                            <div id="accountConfig_${realIndex}" class="hidden mt-2 bg-slate-800/50 rounded-lg p-3 border border-slate-600/30">
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div>
+                                        <label class="block text-slate-300 text-xs mb-1">Nueva Contraseña:</label>
+                                        <div class="flex items-center space-x-2">
+                                            <input type="text" id="newPassword_${realIndex}" value="${student.password}" class="bg-slate-700 text-white text-sm w-full rounded px-2 py-1 border border-slate-500">
+                                            <button onclick="updatePassword(${realIndex})" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">✓</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-slate-300 text-xs mb-1">Cambiar Avatar:</label>
+                                        <div class="flex items-center space-x-2">
+                                            <button onclick="showAvatarSelectorForStudent(${realIndex})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-semibold transition-colors flex items-center space-x-1">
+                                                <span>${student.avatar}</span>
+                                                <span>Cambiar</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-                                <button onclick="quickAssign(${realIndex}, 2)" class="bg-yellow-600 hover:bg-yellow-700 text-white
+        function renderRewards() {
+            const rewardsGrid = document.getElementById('rewardsGrid');
+            const availableStudents = currentUser && currentUser.isTeacher ? 
+                students.filter(s => !s.isTeacher) : 
+                [currentUser];
+            
+            rewardsGrid.innerHTML = rewards.map((reward, index) => {
+                const eligibleStudents = students.filter(s => !s.isTeacher && s.coins >= reward.cost);
+                const coinsNeeded = currentUser && !currentUser.isTeacher ? 
+                    Math.max(0, reward.cost - currentUser.coins) : 0;
+                
+                return `
+                <div class="bg-gradient-to-br ${reward.color}/20 backdrop-blur-lg rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300">
+                    <div class="text-center">
+                        <div class="text-4xl mb-3">${reward.icon}</div>
+                        <h3 class="text-lg font-bold text-white mb-2 student-name">${reward.name}</h3>
+                        <p class="text-slate-300 text-sm mb-4">${reward.description}</p>
+                        <div class="flex items-center justify-center space-x-2 mb-4">
+                            <div class="mini-coin w-6 h-6 rounded-full flex items-center justify-center">
+                                <span class="text-xs font-bold text-slate-900 relative z-10">₽</span>
+                            </div>
+                            <span class="text-xl font-bold text-yellow-400">${reward.cost}</span>
+                        </div>
+                        
+                        ${currentUser && !currentUser.isTeacher && coinsNeeded > 0 ? `
+                            <div class="mb-4 p-2 bg-orange-600/20 rounded-lg border border-orange-500/30">
+                                <p class="text-orange-200 text-sm">Te faltan:</p>
+                                <p class="text-lg font-bold text-orange-300">₽${coinsNeeded}</p>
+                            </div>
+                        ` : ''}
+                        
+                        ${currentUser && currentUser.isTeacher ? `
+                            <div class="mb-4">
+                                <h4 class="text-sm font-semibold text-slate-300 mb-2">Estudiantes elegibles:</h4>
+                                ${eligibleStudents.length > 0 ? `
+                                    <div class="space-y-1 mb-3">
+                                        ${eligibleStudents.map(student => `
+                                            <div class="flex items-center justify-between bg-slate-700/50 rounded px-2 py-1 text-xs">
+                                                <span class="flex items-center space-x-1">
+                                                    <span>${student.avatar}</span>
+                                                    <span class="text-white">${student.name}</span>
+                                                </span>
+                                                <span class="text-yellow-400 font-bold">₽${student.coins}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : `
+                                    <p class="text-slate-400 text-xs mb-3">Ningún estudiante tiene suficientes puntos</p>
+                                `}
+                            </div>
+                            <select onchange="purchaseReward(${index}, this.value)" class="w-full bg-slate-700 text-white px-3 py-2 rounded-lg border border-slate-500 focus:border-blue-400 focus:outline-none">
+                                <option value="">Seleccionar estudiante</option>
+                                ${availableStudents.map((student, studentIndex) => {
+                                    const realIndex = students.findIndex(s => s.name === student.name);
+                                    const canAfford = student.coins >= reward.cost;
+                                    return `<option value="${realIndex}" ${!canAfford ? 'disabled' : ''}>${student.name} (₽${student.coins}) ${!canAfford ? '- Insuficiente' : ''}</option>`;
+                                }).join('')}
+                            </select>
+                        ` : `
+                            <button onclick="purchaseReward(${index}, ${currentUserIndex})" class="w-full ${currentUser.coins >= reward.cost ? 'bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-3 text-lg' : 'bg-gray-600 cursor-not-allowed text-white py-2'} rounded-lg font-semibold transition-all duration-300 shadow-lg" ${currentUser.coins < reward.cost ? 'disabled' : ''}>
+                                ${currentUser.coins >= reward.cost ? '🎉 ¡Canjear Ahora!' : '❌ Insuficiente'}
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
 
+        function purchaseReward(rewardIndex, studentIndex) {
+            if (studentIndex === '' || studentIndex === null || studentIndex === undefined) return;
+            
+            const reward = rewards[rewardIndex];
+            const student = students[studentIndex];
+            
+            if (student.coins < reward.cost) {
+                showChangeNotification(`${student.name} no tiene suficientes PACT COINS para este premio.`);
+                return;
+            }
+            
+            student.coins = Math.round((student.coins - reward.cost) * 10) / 10;
+            saveData();
+            updateDisplay();
+            
+            showChangeNotification(`¡${student.name} ha canjeado ${reward.name}! 🎉`);
+        }
+
+        // ========== INICIALIZACIÓN ==========
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeData();
+            createFloatingNumbers();
+            
+            // Mantener todos tus event listeners originales
+            document.getElementById('loginButton').addEventListener('click', attemptLogin);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('teacherPanelBtn').addEventListener('click', () => {
+                document.getElementById('adminPanel').classList.remove('hidden');
+            });
+            document.getElementById('rewardsToggleStudent').addEventListener('click', () => {
+                document.getElementById('rewardsPanel').classList.remove('hidden');
+            });
+
+            // Enter key support
+            document.getElementById('usernameInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') document.getElementById('passwordInput').focus();
+            });
+            
+            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') attemptLogin();
+            });
+        });
+    </script>
+</body>
+</html>
