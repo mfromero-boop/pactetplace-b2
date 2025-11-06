@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PACTetplace - Grupo B2 - Sincronización en Tiempo Real</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Esto evita que Tailwind use eval()
+  tailwind.config = {
+    corePlugins: {
+      preflight: false,
+    }
+  }
+</script>
     <style>
         body {
             box-sizing: border-box;
@@ -1213,4 +1221,5 @@
                                 <button onclick="quickAssign(${realIndex}, 0.5)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+0.5</button>
                                 <button onclick="quickAssign(${realIndex}, 1)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+1</button>
                                 <button onclick="quickAssign(${realIndex}, 1.5)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+1.5</button>
+
                                 <button onclick="quickAssign(${realIndex}, 2)" class="bg-yellow-600 hover:bg-yellow-700 text-white
