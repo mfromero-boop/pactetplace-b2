@@ -13,16 +13,21 @@
     }
   }
 </script>
-    <style>
-        body {
-            box-sizing: border-box;
-        }
-        
-        @import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&family=Orbitron:wght@400;700;900&display=swap');
-        
-        .tech-font { font-family: 'Orbitron', monospace; }
-        .main-font { font-family: 'Love Ya Like A Sister', cursive; }
-        .student-name { font-family: 'Century Gothic', 'Futura', sans-serif; font-weight: bold; text-transform: uppercase; }
+<style>
+    /* TODOS los @import deben ir PRIMERO */
+    @import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&family=Orbitron:wght@400;700;900&display=swap');
+    
+    /* Después van las reglas normales */
+    body {
+        box-sizing: border-box;
+    }
+    
+    .tech-font { font-family: 'Orbitron', monospace; }
+    .main-font { font-family: 'Love Ya Like A Sister', cursive; }
+    .student-name { font-family: 'Century Gothic', 'Futura', sans-serif; font-weight: bold; text-transform: uppercase; }
+    
+    /* ... el resto de tus estilos IGUAL ... */
+</style>
         
         .stock-market-bg {
             background: 
@@ -1223,3 +1228,4 @@
                                 <button onclick="quickAssign(${realIndex}, 1.5)" class="bg-yellow-600 hover:bg-yellow-700 text-white px-2 py-1 rounded text-xs font-bold transition-colors">+1.5</button>
 
                                 <button onclick="quickAssign(${realIndex}, 2)" class="bg-yellow-600 hover:bg-yellow-700 text-white
+
