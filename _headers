@@ -1,1 +1,4 @@
-
+/*
+  Content-Security-Policy: default-src 'self' 'unsafe-eval' 'unsafe-inline' https: data:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.tailwindcss.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com;
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
